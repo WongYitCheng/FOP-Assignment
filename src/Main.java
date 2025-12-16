@@ -11,40 +11,54 @@ public class Main{
         dataStorage data = new dataStorage();
         data.loadData();
 
-        AuthService auth = new AuthService();
+        AuthService auth = new AuthService(data);
         Scanner sc = new Scanner(System.in);
+        while(true){
+            System.out.println("===== Employee login =====");
+            System.out.print("Enter User ID: ");
+            String id = sc.nextLine();
+            System.out.print("Enter Password: ");
+            String pass = sc.nextLine();
 
-        System.out.println("===== Employee login =====");
-        System.out.print("Enter User ID:");
-        String id = sc.nextLine();
-        System.out.print("Enter Password: ");
-        String pass = sc.nextLine();
-
-        boolean user = auth.login(id, pass, data.getEmployees());
-
-        if (user) {
-            System.out.println("\nLogin successful");
-            Employee logInUser = auth.getCurrentUser();
-            System.out.println("Welcome, " +logInUser.getName() +"("+logInUser.getId()+")");
-            if(auth.getCurrentUser().getRole().equalsIgnoreCase("Manager")){
-                System.out.println("Do you want to register new Employee? (Y?N)");
-                boolean register = sc.nextBoolean();
-                if(register){
-                    System.out.println("===== Register New Employee =====");
-                    System.out.print("Enter Employee Name:");
-                    String newName = sc.nextLine();
-                    System.out.print("Enter Employee ID:");
-                    String newID = sc.nextLine();
-                    System.out.println("Set Password:");
-                    String newPass = sc.nextLine();
-                    System.out.print("Set Role:");
-                    String newRole = sc.nextLine();
-                    data.registerEmployee(newID, newName, newRole, newPass);
+            boolean user = auth.login(id, pass, data.getEmployees());
+            if (user) {
+                System.out.println("\nLogin successful");
+                Employee logInUser = auth.getCurrentUser();
+                System.out.println("Welcome, " +logInUser.getName() +"("+logInUser.getId()+")");
+                while (auth.getCurrentUser() != null) {
+                    System.out.println("===== Main Menu =====");
+                    if (auth.getCurrentUser().getRole().equalsIgnoreCase("Manager")){
+                        System.out.println("1. Register New Employee");
+                    }else{
+                        System.out.println("1. (Option Unavailable)");
+                    }
+                    System.out.println("2. ??");
+                    System.out.println("3. Log Out");
+                    System.out.println("Enter your choice: ");
+                    int choice = sc.nextInt();
+                    sc.nextLine();
+                    if (choice ==1 ){
+                        if(auth.getCurrentUser().getRole().equalsIgnoreCase("Manager")){
+                            System.out.println("===== Register New Employee =====");
+                            System.out.print("Enter Employee Name: ");
+                            String newName = sc.nextLine();
+                            System.out.print("Enter Employee ID: ");
+                            String newID = sc.nextLine();
+                            System.out.print("Set Password: ");
+                            String newPass = sc.nextLine();
+                            System.out.print("Set Role: ");
+                            String newRole = sc.nextLine();
+                            auth.uniqueEmployee(newID, newName, newRole, newPass,data.getEmployees());
+                        }else{
+                            System.out.println("Access Denied, You are not Manager");
+                        }
+                    }else if (choice ==3){
+                        auth.logOut();
+                    }
                 }
+            }else {
+                System.out.println("Login failed. Invalid user ID or password!");
             }
-        }else {
-            System.out.println("Login failed. Invalid user ID or password!");
         }
-
     }
 }

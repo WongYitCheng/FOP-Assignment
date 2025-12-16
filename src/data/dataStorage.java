@@ -30,9 +30,9 @@ public class dataStorage {
         }
 
     }
-    public void registerEmployee(String newName, String newID, String newRole,String newPass)  {
+    public void registerEmployee(String newID, String newName, String newRole,String newPass) {
         try (FileWriter writer = new FileWriter("employees.csv",true)){
-            writer.write(newID+","+newName+","+newRole+","+newPass);
+            writer.write("\n"+newID+","+newName+","+newRole+","+newPass);
             System.out.println("Employee Registered Successfully");
             Employee employee = new Employee(newID,newName,newRole,newPass);
             employeeList.add(employee);
