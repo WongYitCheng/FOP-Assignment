@@ -14,6 +14,7 @@ public class Main{
 
         AuthService auth = new AuthService(data);
         AttendanceService att = new AttendanceService(data);
+        StockServiceReplace stock =  new StockServiceReplace(data,att);
         Scanner sc = new Scanner(System.in);
         while(true){
             System.out.println("===== Employee login =====");
@@ -37,6 +38,8 @@ public class Main{
                     System.out.println("2. Clock in");
                     System.out.println("3. Clock out");
                     System.out.println("4. Log Out");
+                    System.out.println("5. Stock Count");
+                    System.out.println("6. Stock Movement");
                     System.out.println("Enter your choice: ");
                     int choice = sc.nextInt();
                     sc.nextLine();
@@ -64,6 +67,10 @@ public class Main{
                     }else if (choice ==4){
                         auth.logOut();
 
+                    }else if (choice ==5){
+                        stock.performStockCount(logInUser);
+                    }else if (choice ==6){
+                        stock.stockMovement(logInUser);
                     }
                 }
             }else {

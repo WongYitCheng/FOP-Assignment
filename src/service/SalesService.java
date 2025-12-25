@@ -91,7 +91,7 @@ class SalesDataManager {
     private List<Outlet> outlets = new ArrayList<>();
     private List<WatchModel> models = new ArrayList<>();
 
-    private static final String EMPLOYEE_FILE = "employee.csv";
+    private static final String EMPLOYEE_FILE = "employees.csv";
     private static final String MODEL_FILE = "model.csv";
     private static final String OUTLET_FILE = "outlet.csv";
 
