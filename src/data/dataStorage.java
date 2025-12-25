@@ -1,5 +1,7 @@
 package data;
+import model.AttendanceLog;
 import model.Employee;
+import model.Outlet;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -7,9 +9,12 @@ import java.util.Scanner;
 
 public class dataStorage {
     private ArrayList<Employee> employeeList = new  ArrayList<>();
+    private Outlet [] allOutlet = new Outlet[100];
+    private int outletCount =0;
 
     public void loadData() {
         loadEmployee();
+        loadOutlet();
     }
     private void loadEmployee(){
         try{
@@ -41,7 +46,42 @@ public class dataStorage {
         }
     }
 
+    public void saveAttendance(AttendanceLog log) {
+        try(FileWriter writer = new FileWriter("attendance.csv",true)){
+            writer.write("\n"+ log.attendanceToCSV());
+        }catch(IOException e){
+            System.out.println("Failed to save attendance");
+        }
+    }
+
     public ArrayList<Employee> getEmployees() {
         return employeeList;
+    }
+
+    public void loadOutlet(){
+        try{
+            BufferedReader reader = new BufferedReader(new FileReader("outlet.csv"));
+            reader.readLine(); //to skip the header
+            String line;
+            while((line = reader.readLine()) != null && outletCount< allOutlet.length){
+                String [] parts =line.split(",");
+                if (parts.length >= 2) {
+                    allOutlet[outletCount] = new Outlet(parts[0].trim(), parts[1].trim());
+                    outletCount++;
+                }
+            }
+        }catch(FileNotFoundException e){
+            System.out.println("File not found");
+        } catch (IOException e) {
+            System.out.println("Something went wrong.");;
+        }
+    }
+
+    public Outlet[] getAllOutlet() {
+        return allOutlet;
+    }
+
+    public int getOutletCount() {
+        return outletCount;
     }
 }
