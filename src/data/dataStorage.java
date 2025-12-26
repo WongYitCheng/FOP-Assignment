@@ -109,16 +109,20 @@ public class dataStorage {
     }
 
     public void saveModels() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter("model.csv",true))) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter("model.csv"))) {
             pw.print("Model,Price");
             for (Outlet o : allOutlet) {
-                pw.print("," + o.getOutletCode());
+                if(o!=null){
+                    pw.print("," + o.getOutletCode());
+                }
             }
             pw.println();
             for (WatchModel m : models) {
                 pw.print(m.getName() + "," + m.getPrice());
                 for (Outlet o : allOutlet) {
-                    pw.print("," + m.getStock(o.getOutletCode()));
+                    if(o!=null){
+                        pw.print("," + m.getStock(o.getOutletCode()));
+                    }
                 }
                 pw.println();
             }
@@ -130,4 +134,6 @@ public class dataStorage {
     public List<WatchModel> getModels() {
         return models;
     }
+
+
 }
