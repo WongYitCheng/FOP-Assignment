@@ -1,8 +1,5 @@
 package data;
-import model.AttendanceLog;
-import model.Employee;
-import model.Outlet;
-import model.WatchModel;
+import model.*;
 
 import java.io.*;
 import java.util.*;
@@ -133,6 +130,42 @@ public class dataStorage {
 
     public List<WatchModel> getModels() {
         return models;
+    }
+
+    public void recordSale(Sale sale){
+        try(PrintWriter writer = new PrintWriter(new FileWriter("sales.csv",true))){
+            if(sale.salesToCSV() != null){
+                writer.print(sale.salesToCSV());
+                writer.println();
+            }
+        }catch(IOException e){
+            System.out.println("Error recording sale: " + e.getMessage());
+        }
+    }
+    public ArrayList<Sale>loadSale(){
+        ArrayList<Sale> salesList = new ArrayList<>();
+        ArrayList<String> watchModels = null;
+        double subtotal = 0;
+
+        try(Scanner reader = new Scanner(new File("sales.csv"))){
+            reader.nextLine();
+            while(reader.hasNextLine()) {
+                String line = reader.nextLine().trim();
+                String[] data = line.split(",");
+
+                if (data.length >= 7) {
+                    String[]tempArray = data[3].split("\\|");
+                    subtotal = Double.parseDouble(data[4]);
+                    watchModels = new ArrayList<>(Arrays.asList(tempArray));
+                }
+                Sale sales = new Sale(data[0], data[1], data[2], watchModels, subtotal, data[5], data[6], data[7]);
+                salesList.add(sales);
+            }
+
+        }catch(FileNotFoundException e){
+            System.out.println("File not found: " + e.getMessage());
+        }
+        return salesList;
     }
 
 

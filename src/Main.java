@@ -16,6 +16,7 @@ public class Main{
         AttendanceService att = new AttendanceService(data);
         StockServiceReplace stock =  new StockServiceReplace(data,att);
         SalesServiceReplace sales = new SalesServiceReplace(data,att);
+        SearchService search = new SearchService(data);
         Scanner sc = new Scanner(System.in);
         while(true){
             System.out.println("===== Employee login =====");
@@ -75,8 +76,7 @@ public class Main{
                     }else if (choice ==6){
                         sales.recordSale(logInUser);
                     }else if(choice ==7){
-                        //search infomation
-                        return;
+                        search.searchService(logInUser);
                     }else if(choice ==8){
                         //edit infomation
                         return;
