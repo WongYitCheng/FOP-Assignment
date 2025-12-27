@@ -1,6 +1,7 @@
 package service;
 import data.dataStorage;
 import model.Employee;
+import model.Sale;
 import model.WatchModel;
 
 import java.io.FileWriter;
@@ -14,6 +15,7 @@ import java.util.Scanner;
 public class SalesServiceReplace {
     private AttendanceService attendanceService;
     private dataStorage storage;
+    ArrayList<String>watchModel = new ArrayList<>();
 
     public SalesServiceReplace(dataStorage storage,AttendanceService attendanceService) {
         this.storage = storage;
@@ -84,6 +86,7 @@ public class SalesServiceReplace {
 
             itemEntries.add("Item(s): " + modelName);
             itemEntries.add("Quantity: " + qty);
+            watchModel.add(modelName+":"+qty); //for searchService
             itemEntries.add("Unit Price: RM" + unitPrice);
 
             model.setStock(outletCode, currentStock - qty);
@@ -93,6 +96,7 @@ public class SalesServiceReplace {
             if (!more.equalsIgnoreCase("Y")) {
                 break;
             }
+
         }
 
         System.out.println("Subtotal: RM" + subtotal);
@@ -124,6 +128,11 @@ public class SalesServiceReplace {
         }
 
         System.out.println("Receipt generated: " + receiptFile);
+
+        //for searchService
+        Sale sale = new Sale(dateStr,timeStr,customerName,watchModel,subtotal, user.getName(), transactionMethod,"Success");
+        sale.salesToCSV();
+        storage.recordSale(sale);
     }
 
 }
