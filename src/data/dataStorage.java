@@ -44,6 +44,18 @@ public class dataStorage {
         }
     }
 
+    // method to overwrite employees file for edit
+    public void saveAllEmployees() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("employees.csv"))) {
+            writer.println("ID,Name,Role,Pass");
+            for (Employee e : employeeList) {
+                writer.println(e.getId() + "," + e.getName() + "," + e.getRole() + "," + e.getPassword());
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to update employees.");
+        }
+    }
+
     public void saveAttendance(AttendanceLog log) {
         try(FileWriter writer = new FileWriter("attendance.csv",true)){
             writer.write("\n"+ log.attendanceToCSV());
@@ -142,6 +154,21 @@ public class dataStorage {
             System.out.println("Error recording sale: " + e.getMessage());
         }
     }
+
+    //method to overwrite sales file for edit
+    public void saveAllSales(List<Sale> sales) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("sales.csv"))) {
+            writer.println("Date,Time,Customer,Items,Subtotal,Employee,Method,Status");
+            for (Sale s : sales) {
+                if (s.salesToCSV() != null) {
+                    writer.println(s.salesToCSV());
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error updating sales file: " + e.getMessage());
+        }
+    }
+
     public ArrayList<Sale>loadSale(){
         ArrayList<Sale> salesList = new ArrayList<>();
         ArrayList<String> watchModels = null;
@@ -167,6 +194,4 @@ public class dataStorage {
         }
         return salesList;
     }
-
-
 }
