@@ -5,7 +5,6 @@ import java.util.*;
 
 public class EmployeePerformanceService {
 
-        // Internal helper class to store metrics per employee
         private static class Metric {
             String name;
             double totalSalesValue = 0;
@@ -25,24 +24,24 @@ public class EmployeePerformanceService {
 
             for (Sale sale : allSales) {
                 String empName = sale.getEmployeeName();
-                // Requirement: calculate total sales value and transaction count
+                
                 Metric m = performanceMap.getOrDefault(empName, new Metric(empName));
                 m.totalSalesValue += sale.getSubtotal();
                 m.transactionCount++;
                 performanceMap.put(empName, m);
             }
 
-            //Sort by performance descending (highest to lowest)
+            
             List<Metric> sortedList = new ArrayList<>(performanceMap.values());
             sortedList.sort((a, b) -> Double.compare(b.totalSalesValue, a.totalSalesValue));
 
             //Display in tabular format for clear insight
             System.out.println("\n--------------------------------------------------------------");
-            System.out.printf("%-20s | %-15s | %-15s\n", "Employee Name", "Total Sales", "Transactions");
+            System.out.printf("%-35s | %-15s | %-15s\n", "Employee Name", "Total Sales", "Transactions");
             System.out.println("--------------------------------------------------------------");
 
             for (Metric m : sortedList) {
-                System.out.printf("%-20s | RM%-13.2f | %-15d\n",
+                System.out.printf("%-35s | RM%-13.2f | %-15d\n",
                         m.name, m.totalSalesValue, m.transactionCount);
             }
             System.out.println("--------------------------------------------------------------\n");
